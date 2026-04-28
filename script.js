@@ -1,27 +1,28 @@
-//your code here
-const divs = document.querySelectorAll(".container div");
+const divs = document.querySelectorAll("div[id^='div']");
 
-let draggedId = null;
+let draggedId = "";
 
 divs.forEach(div => {
-  div.addEventListener("dragstart", (e) => {
-    draggedId = e.target.id;
+  div.setAttribute("draggable", true);
+
+  div.addEventListener("dragstart", function (e) {
+    draggedId = this.id;
+    e.dataTransfer.setData("text/plain", this.id);
   });
 
-  div.addEventListener("dragover", (e) => {
-    e.preventDefault(); // required
+  div.addEventListener("dragover", function (e) {
+    e.preventDefault();
   });
 
-  div.addEventListener("drop", (e) => {
+  div.addEventListener("drop", function (e) {
     e.preventDefault();
 
-    const targetId = e.target.id;
+    const targetId = this.id;
 
     if (draggedId !== targetId) {
       const draggedEl = document.getElementById(draggedId);
       const targetEl = document.getElementById(targetId);
 
-     
       const temp = draggedEl.style.backgroundImage;
       draggedEl.style.backgroundImage = targetEl.style.backgroundImage;
       targetEl.style.backgroundImage = temp;
